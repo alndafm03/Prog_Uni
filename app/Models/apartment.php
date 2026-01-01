@@ -25,7 +25,7 @@ class apartment extends Model
     {
         return $this->hasManyThrough(
             User::class,
-            Booking::class,
+            booking::class,
             'apartment_id',
             'id',
             'id',
