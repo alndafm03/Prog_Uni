@@ -4,9 +4,9 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
-use App\Models\Apartment;
-use App\Models\Booking;
-use App\Models\Review;
+use App\Models\apartment;
+use App\Models\booking;
+use App\Models\review;
 
 class DashboardController extends Controller
 {
@@ -21,18 +21,18 @@ class DashboardController extends Controller
             'rejected'   => User::where('status', 'rejected')->count(),
         ],
         'apartments' => [
-            'total' => Apartment::count(),
+            'total' => apartment::count(),
         ],
         'bookings' => [
-            'total'     => Booking::count(),
-            'pending'   => Booking::where('status', 'pending')->count(),
-            'approved'  => Booking::where('status', 'approved')->count(),
-            'completed' => Booking::where('status', 'completed')->count(),
-            'rejected'  => Booking::where('status', 'rejected')->count(),
+            'total'     => booking::count(),
+            'pending'   => booking::where('status', 'pending')->count(),
+            'approved'  => booking::where('status', 'approved')->count(),
+            'completed' => booking::where('status', 'completed')->count(),
+            'rejected'  => booking::where('status', 'rejected')->count(),
         ],
         'reviews' => [
-            'total'   => Review::count(),
-            'average' => round(Review::avg('rating'), 2),
+            'total'   => review::count(),
+            'average' => round(review::avg('rating'), 2),
         ]
     ];
 

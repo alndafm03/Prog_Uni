@@ -16,7 +16,7 @@ use Illuminate\Support\Facades\Hash; use App\Models\User;
 
 Route::post('register', [UserController::class, 'register']);
 Route::post('login', [UserController::class, 'login']);
-// Route::post('loginAdmin', [AuthController::class, 'login']);
+Route::post('loginAdmin', [AuthController::class, 'login']);
 
 //user routes
 
@@ -83,38 +83,38 @@ Route::middleware('auth:sanctum')->group(function () {
 
 //admin routes
 
-Route::prefix('admin')->group(function () {
+// Route::prefix('admin')->group(function () {
 
-    // صفحة تسجيل الدخول
-    Route::get('/login', [AuthController::class, 'showLoginForm'])->name('admin.login');
+//     // صفحة تسجيل الدخول
+//     Route::get('/login', [AuthController::class, 'showLoginForm'])->name('admin.login');
 
-    // تنفيذ تسجيل الدخول
-    Route::post('/login', [AuthController::class, 'login'])->name('admin.login.submit');
-});
-
-Route::prefix('admin')->middleware(['auth:sanctum', 'CheckUser'])->group(function () {
-
-    // Dashboard
-    Route::get('dashboard', [DashboardController::class, 'index'])->name('admin.dashboard');
-
-    // إدارة المستخدمين
-    Route::get('getpending', [UserManagementController::class, 'getpending'])->name('admin.users.pending');
-    Route::post('approveuser/{id}', [UserManagementController::class, 'approveuser'])->name('admin.users.approve');
-    Route::post('rejectuser/{id}', [UserManagementController::class, 'rejectuser'])->name('admin.users.reject');
-    Route::delete('deleteuser/{id}', [UserManagementController::class, 'deleteuser'])->name('admin.users.delete');
-
-    // تسجيل الخروج
-    Route::post('logoutAdmin', [AuthController::class, 'logout'])->name('admin.logout');
-});
-
-
-// Route::middleware(['auth:sanctum', 'CheckUser'])->group(function () {
-
-//     Route::post('logoutAdmin', [AuthController::class, 'logout']);
-
-//     Route::get('getpending', [UserManagementController::class, 'getpending']);
-//     Route::post('approveuser/{id}', [UserManagementController::class, 'approveuser']);
-//     Route::post('rejectuser/{id}', [UserManagementController::class, 'rejectuser']);
-//     Route::post('deleteuser/{id}', [UserManagementController::class, 'deleteuser']);
-//     Route::get('dashboard', [DashboardController::class, 'index']);
+//     // تنفيذ تسجيل الدخول
+//     Route::post('/login', [AuthController::class, 'login'])->name('admin.login.submit');
 // });
+
+// Route::prefix('admin')->middleware(['auth:sanctum', 'CheckUser'])->group(function () {
+
+//     // Dashboard
+//     Route::get('dashboard', [DashboardController::class, 'index'])->name('admin.dashboard');
+
+//     // إدارة المستخدمين
+//     Route::get('getpending', [UserManagementController::class, 'getpending'])->name('admin.users.pending');
+//     Route::post('approveuser/{id}', [UserManagementController::class, 'approveuser'])->name('admin.users.approve');
+//     Route::post('rejectuser/{id}', [UserManagementController::class, 'rejectuser'])->name('admin.users.reject');
+//     Route::delete('deleteuser/{id}', [UserManagementController::class, 'deleteuser'])->name('admin.users.delete');
+
+//     // تسجيل الخروج
+//     Route::post('logoutAdmin', [AuthController::class, 'logout'])->name('admin.logout');
+// });
+
+
+Route::middleware(['auth:sanctum', 'CheckUser'])->group(function () {
+
+    Route::post('logoutAdmin', [AuthController::class, 'logout']);
+
+    Route::get('getpending', [UserManagementController::class, 'getpending']);
+    Route::post('approveuser/{id}', [UserManagementController::class, 'approveuser']);
+    Route::post('rejectuser/{id}', [UserManagementController::class, 'rejectuser']);
+    Route::post('deleteuser/{id}', [UserManagementController::class, 'deleteuser']);
+    Route::get('dashboard', [DashboardController::class, 'index']);
+});
