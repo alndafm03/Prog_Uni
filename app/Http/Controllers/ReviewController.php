@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Review;
-use App\Models\Booking;
+use App\Models\review;
+use App\Models\booking;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -19,7 +19,7 @@ class ReviewController extends Controller
     // عرض مراجعات مرتبطة بحجز معين
     public function showByBooking($booking_id)
     {
-        $reviews = Review::where('booking_id', $booking_id)
+        $reviews = review::where('booking_id', $booking_id)
                          ->with('booking')
                          ->get();
 
@@ -41,7 +41,7 @@ class ReviewController extends Controller
             return response()->json(['message' => 'لا يمكنك إضافة مراجعة لحجز لا يخصك'], 403);
         }
 
-        $review = Review::create([
+        $review = review::create([
             'booking_id' => $booking->id,
             'rating'     => $request->rating,
             'comment'    => $request->comment,
