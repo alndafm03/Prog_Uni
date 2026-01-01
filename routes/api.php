@@ -118,12 +118,3 @@ Route::prefix('admin')->middleware(['auth:sanctum', 'CheckUser'])->group(functio
 //     Route::post('deleteuser/{id}', [UserManagementController::class, 'deleteuser']);
 //     Route::get('dashboard', [DashboardController::class, 'index']);
 // });
-
-
-Route::get('/fix-password', function () {
-    $user = User::find(4);
-    // غيّر الرقم حسب المستخدم المطلوب
-    $user->password = Hash::make('12345678');
-    $user->save();
-    return 'Password updated successfully';
-});
