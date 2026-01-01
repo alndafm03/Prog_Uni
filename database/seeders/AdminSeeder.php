@@ -9,17 +9,18 @@ class AdminSeeder extends Seeder
 {
     public function run(): void
     {
-        // غيّر 1 إلى الـ id الخاص بالمستخدم الذي تريد تعيينه كـ admin
         $user = User::find(1);
-
+        // غيّر الرقم حسب المستخدم المطلوب
         if (! $user) {
             $this->command->info('User not found.');
             return;
         }
-
-        $user->role = 'admin'; // أو is_admin = 1 حسب جدولك
+        if ($user->role === 'admin') {
+            $this->command->info('User already admin.');
+            return;
+        }
+        $user->role = 'admin';
         $user->save();
-
         $this->command->info("User {$user->email} is now admin.");
     }
 }
