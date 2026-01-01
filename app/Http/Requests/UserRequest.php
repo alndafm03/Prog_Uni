@@ -26,7 +26,7 @@ class UserRequest extends FormRequest
             'last_name'       => 'required|string|max:255',
             'phone'           => 'required|regex:/^[0-9]{10}$/|unique:users,phone',
             'password'        => 'required|string|min:8|confirmed',
-            'role'            => 'required|in:renter,owner',
+            'role'            => 'required|in:renter,owner,admin',
             'date_of_birth'   => 'required|date|before:today',
             'personal_photo'  => 'required|image|mimes:jpg,jpeg,png|max:2048',
             'id_photo'        => 'required|image|mimes:jpg,jpeg,png|max:2048'
