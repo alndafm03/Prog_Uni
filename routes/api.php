@@ -41,7 +41,7 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('Myapartment', [ApartmentController::class, 'myApartments']); // GET /apartments/owner/list
 
         Route::get('{apartment}', [ApartmentController::class, 'show']); // GET /apartments/{id}
-        Route::put('{apartment}', [ApartmentController::class, 'update']); // PUT /apartments/{id}
+        Route::post('{apartment}', [ApartmentController::class, 'update']); // PUT /apartments/{id}
         Route::delete('{apartment}', [ApartmentController::class, 'destroy']); // DELETE /apartments/{id}
 
     });
@@ -53,7 +53,7 @@ Route::middleware('auth:sanctum')->group(function () {
         // عرض حجز واحد (اختياري إذا أردت)
         Route::get('/{id}', [BookingController::class, 'show']);
         // تعديل حجز
-        Route::put('/{id}', [BookingController::class, 'update']);
+        Route::post('/{id}', [BookingController::class, 'update']);
         // حذف حجز
         Route::delete('/{id}', [BookingController::class, 'destroy']);
     });
@@ -72,7 +72,7 @@ Route::middleware('auth:sanctum')->group(function () {
         // إنشاء مراجعة جديدة
         Route::post('/{booking_id}', [ReviewController::class, 'store']);
         // تعديل مراجعة
-        Route::put('/{id}', [ReviewController::class, 'update']);
+        Route::post('/up/{id}', [ReviewController::class, 'update']);
         // حذف مراجعة
         Route::delete('/{id}', [ReviewController::class, 'destroy']);
     });
