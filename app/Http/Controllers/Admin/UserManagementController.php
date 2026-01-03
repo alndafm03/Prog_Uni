@@ -92,7 +92,7 @@ class UserManagementController extends Controller
     //ارجاع كل اليوزرس
     public function getAllUsers()
     {
-        $users = User::select('id', 'first_name', 'last_name', 'phone', 'role', 'date_of_birth','personal_photo','id_photo')->orderBy('id', 'desc')->get();
+        $users = User::select('id', 'first_name', 'last_name', 'phone','status', 'role', 'date_of_birth','personal_photo','id_photo')->orderBy('id', 'desc')->get();
         return response()->json(['status' => true, 'users' => $users]);
     }
 }
