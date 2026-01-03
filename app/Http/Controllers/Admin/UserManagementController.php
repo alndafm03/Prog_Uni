@@ -88,4 +88,11 @@ class UserManagementController extends Controller
             'message' => 'Account deleted successfully'
         ], 200);
     }
+    
+    //ارجاع كل اليوزرس
+    public function getAllUsers()
+    {
+        $users = User::select('id', 'first_name', 'last_name', 'email', 'phone', 'role', 'date_of_birth')->orderBy('id', 'desc')->get();
+        return response()->json(['status' => true, 'users' => $users]);
+    }
 }

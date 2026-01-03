@@ -116,5 +116,6 @@ Route::middleware(['auth:sanctum', 'CheckUser'])->group(function () {
     Route::post('approveuser/{id}', [UserManagementController::class, 'approveuser']);
     Route::post('rejectuser/{id}', [UserManagementController::class, 'rejectuser']);
     Route::post('deleteuser/{id}', [UserManagementController::class, 'deleteuser']);
+    Route::get('users', [UserManagementController::class, 'getAllUsers']);
     Route::get('dashboard', [DashboardController::class, 'index']);
 });
