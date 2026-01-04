@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
-use App\Models\Favorite;
+use App\Models\favorite;
 use App\Models\apartment;
 
 class FavoriteController extends Controller
