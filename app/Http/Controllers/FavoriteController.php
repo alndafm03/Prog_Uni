@@ -29,7 +29,7 @@ class FavoriteController extends Controller
         }
 
         // 3) التحقق إن كانت الشقة موجودة مسبقًا في المفضلة
-        $exists = Favorite::where('user_id', $user->id)
+        $exists = favorite::where('user_id', $user->id)
             ->where('apartment_id', $apartment_id)
             ->first();
 
@@ -39,7 +39,7 @@ class FavoriteController extends Controller
         }
 
         // 4) إضافة الشقة إلى المفضلة
-        Favorite::create([
+        favorite::create([
             'user_id' => $user->id,
             'apartment_id' => $apartment_id
         ]);
@@ -50,7 +50,7 @@ class FavoriteController extends Controller
     {
         $user = Auth::user();
         // جلب الشقق المفضلة مع بيانات الشقة والمالك
-        $favorites = Favorite::where('user_id', $user->id)->with([
+        $favorites = favorite::where('user_id', $user->id)->with([
             'apartment.owner:id,first_name,phone',
         ])->get()
             ->map(function ($fav) {
