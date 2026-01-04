@@ -60,4 +60,27 @@ class FavoriteController extends Controller
             });
         return response()->json(['favorites' => $favorites]);
     }
+    public function removeFavorite($apartment_id)
+{
+    $user = Auth::user();
+
+    // التحقق أن الشقة موجودة في مفضلة المستخدم
+    $favorite = favorite::where('user_id', $user->id)
+        ->where('apartment_id', $apartment_id)
+        ->first();
+
+    if (!$favorite) {
+        return response()->json([
+            'message' => 'This apartment is not in your favorites'
+        ], 404);
+    }
+
+    // حذف الشقة من المفضلة
+    $favorite->delete();
+
+    return response()->json([
+        'message' => 'Apartment removed from favorites successfully'
+    ]);
+}
+
 }

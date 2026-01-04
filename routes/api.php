@@ -78,6 +78,8 @@ Route::middleware('auth:sanctum')->group(function () {
     });
     Route::post('favorite/{apartment_id}', [FavoriteController::class, 'toggleFavorite']);
     Route::get('favorite', [FavoriteController::class, 'getFavorites']);
+    Route::delete('favorite/{apartment_id}', [FavoriteController::class, 'removeFavorite']);
+
 });
 
 
