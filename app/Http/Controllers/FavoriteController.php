@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use App\Models\Favorite;
-use App\Models\Apartment;
+use App\Models\apartment;
 
 class FavoriteController extends Controller
 {
@@ -21,7 +21,7 @@ class FavoriteController extends Controller
         }
 
         // 2) التحقق أن الشقة موجودة
-        $apartment = Apartment::find($apartment_id);
+        $apartment = apartment::find($apartment_id);
         if (!$apartment) {
             return response()->json([
                 'message' => 'Apartment not found'
