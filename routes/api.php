@@ -18,6 +18,10 @@ Route::post('register', [UserController::class, 'register']);
 Route::post('login', [UserController::class, 'login']);
 Route::post('loginAdmin', [AuthController::class, 'login']);
 
+Route::get('', [ApartmentController::class, 'index']); // GET /apartments
+Route::post('filter', [ApartmentController::class, 'filter']); // GET /apartments/filter/list
+ Route::get('{apartment}', [ApartmentController::class, 'show']); // GET /apartments/{id}
+
 //user routes
 
 Route::middleware('auth:sanctum')->group(function () {
@@ -34,13 +38,12 @@ Route::middleware('auth:sanctum')->group(function () {
     //apartment routes
     Route::prefix('apartments')->group(function () {
 
-        Route::get('', [ApartmentController::class, 'index']); // GET /apartments
         Route::post('', [ApartmentController::class, 'store']); // POST /apartments
 
-        Route::post('filter', [ApartmentController::class, 'filter']); // GET /apartments/filter/list
+
         Route::get('Myapartment', [ApartmentController::class, 'myApartments']); // GET /apartments/owner/list
 
-        Route::get('{apartment}', [ApartmentController::class, 'show']); // GET /apartments/{id}
+
         Route::post('{apartment}', [ApartmentController::class, 'update']); // PUT /apartments/{id}
         Route::delete('{apartment}', [ApartmentController::class, 'destroy']); // DELETE /apartments/{id}
 
