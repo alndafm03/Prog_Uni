@@ -17,12 +17,13 @@ class ReviewController extends Controller
     }
 
     // عرض مراجعات مرتبطة بحجز معين
-    public function showByBooking($booking_id)
+    public function showapartmentreview($apartment_id)
     {
-        $reviews = review::where('booking_id', $booking_id)
-            ->with('booking')
+        $reviews = review::whereHas('booking', function ($query) use ($apartment_id) {
+            $query->where('apartment_id', $apartment_id);
+        })->with(['booking.apartment', 'booking.user'])
+            // لو بدك معلومات إضافية
             ->get();
-
         return response()->json($reviews);
     }
 
@@ -40,7 +41,7 @@ class ReviewController extends Controller
         if ($booking->renter_id !== Auth::id()) {
             return response()->json(['message' => 'لا يمكنك إضافة مراجعة لحجز لا يخصك'], 403);
         }
-        
+
         if (!in_array($booking->status, ['approved', 'completed'])) {
             return response()->json(['message' => 'لا يمكنك إضافة مراجعة إلا بعد الموافقة على الحجز أو اكتماله'], 403);
         }
