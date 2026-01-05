@@ -52,7 +52,11 @@ class BookingController extends Controller
     // إنشاء حجز جديد
     public function store(Request $request)
     {
-
+        $request->validate([
+            'apartment_id' => 'required|exists:apartments,id',
+            'start_date' => 'required|date|after_or_equal:today',
+            'end_date' => 'required|date|after_or_equal:start_date',
+        ]);
         // Check if the authenticated user is renter
         if (Auth::user()->role !== 'renter') {
             return response()->json(['message' => 'Only renter accounts can create reservations'], 403);
