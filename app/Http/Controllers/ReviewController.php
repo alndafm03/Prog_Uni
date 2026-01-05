@@ -20,8 +20,8 @@ class ReviewController extends Controller
     public function showByBooking($booking_id)
     {
         $reviews = review::where('booking_id', $booking_id)
-                         ->with('booking')
-                         ->get();
+            ->with('booking')
+            ->get();
 
         return response()->json($reviews);
     }
@@ -40,7 +40,10 @@ class ReviewController extends Controller
         if ($booking->renter_id !== Auth::id()) {
             return response()->json(['message' => 'لا يمكنك إضافة مراجعة لحجز لا يخصك'], 403);
         }
-
+        
+        if (!in_array($booking->status, ['approved', 'completed'])) {
+            return response()->json(['message' => 'لا يمكنك إضافة مراجعة إلا بعد الموافقة على الحجز أو اكتماله'], 403);
+        }
         $review = review::create([
             'booking_id' => $booking->id,
             'rating'     => $request->rating,
