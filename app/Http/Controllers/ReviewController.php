@@ -27,7 +27,7 @@ class ReviewController extends Controller
     }
 
     // إنشاء مراجعة جديدة
-    public functistore(Request $request, $booking_id)
+    public function store(Request $request, $booking_id)
     {
         $request->validate([
             'rating'  => 'required|in:1,2,3,4,5',
