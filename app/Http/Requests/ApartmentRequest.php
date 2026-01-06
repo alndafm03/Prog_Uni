@@ -19,7 +19,7 @@ class ApartmentRequest extends FormRequest
             'description'   => 'required|string|max:2000',
             'price'         => 'required|numeric|min:0',
             'count_room'     => 'required|integer|min:1',
-            'count_personal' => 'required|integer|min:1',
+            'count_personal' => 'nullable|integer|min:1',
             'area'          => 'required|integer|min:10',
             'floor'         => 'required|integer|min:0',
             'balcony'       => 'boolean',
