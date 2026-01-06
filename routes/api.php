@@ -11,7 +11,8 @@ use App\Http\Controllers\OwnerController;
 use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\FavoriteController;
-use Illuminate\Support\Facades\Hash; use App\Models\User;
+use Illuminate\Support\Facades\Hash;
+use App\Models\User;
 //public routes
 
 Route::post('register', [UserController::class, 'register']);
@@ -20,7 +21,7 @@ Route::post('loginAdmin', [AuthController::class, 'login']);
 
 Route::get('apartments', [ApartmentController::class, 'index']); // GET /apartments
 Route::post('filter', [ApartmentController::class, 'filter']); // GET /apartments/filter/list
- Route::get('apartments/{apartment}', [ApartmentController::class, 'show']); // GET /apartments/{id}
+Route::get('apartments/{apartment}', [ApartmentController::class, 'show']); // GET /apartments/{id}
 
 //user routes
 
@@ -71,7 +72,7 @@ Route::middleware('auth:sanctum')->group(function () {
         // عرض كل المراجعات
         Route::get('', [ReviewController::class, 'index']);
         // عرض مراجعات مرتبطة بحجز معين
-        Route::get('/{booking_id}', [ReviewController::class, 'showByBooking']);
+        Route::get('/{booking_id}', [ReviewController::class, 'showapartmentreview']);
         // إنشاء مراجعة جديدة
         Route::post('/{booking_id}', [ReviewController::class, 'store']);
         // تعديل مراجعة
@@ -82,7 +83,6 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('favorite/{apartment_id}', [FavoriteController::class, 'toggleFavorite']);
     Route::get('favorite', [FavoriteController::class, 'getFavorites']);
     Route::delete('favorite/{apartment_id}', [FavoriteController::class, 'removeFavorite']);
-
 });
 
 
