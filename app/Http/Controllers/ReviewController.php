@@ -18,14 +18,16 @@ class ReviewController extends Controller
 
     // عرض مراجعات مرتبطة بحجز معين
     public function showapartmentreview($apartment_id)
-    {
-        $reviews = review::whereHas('booking', function ($query) use ($apartment_id) {
+{
+    $reviews = review::whereHas('booking', function ($query) use ($apartment_id) {
             $query->where('apartment_id', $apartment_id);
-        })->with(['booking.apartment', 'booking.user'])
-            // لو بدك معلومات إضافية
-            ->get();
-        return response()->json($reviews);
-    }
+        })
+        ->select('id', 'rating', 'comment', 'created_at')
+        ->get();
+
+    return response()->json($reviews);
+}
+
 
     // إنشاء مراجعة جديدة
     public function store(Request $request, $booking_id)
