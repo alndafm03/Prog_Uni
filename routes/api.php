@@ -18,9 +18,9 @@ Route::post('register', [UserController::class, 'register']);
 Route::post('login', [UserController::class, 'login']);
 Route::post('loginAdmin', [AuthController::class, 'login']);
 
-Route::get('', [ApartmentController::class, 'index']); // GET /apartments
+Route::get('apartments', [ApartmentController::class, 'index']); // GET /apartments
 Route::post('filter', [ApartmentController::class, 'filter']); // GET /apartments/filter/list
- Route::get('{apartment}', [ApartmentController::class, 'show']); // GET /apartments/{id}
+ Route::get('apartments/{apartment}', [ApartmentController::class, 'show']); // GET /apartments/{id}
 
 //user routes
 
