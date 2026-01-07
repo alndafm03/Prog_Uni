@@ -118,11 +118,6 @@ class OwnerController extends Controller
                 'message' => 'This booking cannot be approved because it is not in pending status'
             ], 400);
         }
-        // Prevent approving past bookings
-        if ($booking->start_date < now()->toDateString()) {
-            return response()->json(['message' => 'Cannot approve a booking with a past date'], 400);
-        }
-
         // Update status to approved
         $booking->status = 'approved';
         $booking->save();
@@ -157,9 +152,6 @@ class OwnerController extends Controller
             return response()->json([
                 'message' => 'This booking cannot be rejected because it is not in pending status'
             ], 400);
-        }
-        if ($booking->start_date < now()->toDateString()) {
-            return response()->json(['message' => 'Cannot approve a booking with a past date'], 400);
         }
 
         // Update status to rejected
