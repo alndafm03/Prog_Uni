@@ -61,6 +61,9 @@ class BookingController extends Controller
         if (Auth::user()->role !== 'renter') {
             return response()->json(['message' => 'Only renter accounts can create reservations'], 403);
         }
+        // if ($request->start_date < now()->toDateString()) {
+        //     return response()->json(['message' => 'Start date cannot be in the past'], 400);
+        // }
 
         $exists = booking::where('apartment_id', $request->apartment_id)
             ->where(function ($query) use ($request) {

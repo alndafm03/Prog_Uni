@@ -70,7 +70,7 @@ class UserController extends Controller
             $user
         ], 200);
     }
-    public function updateprofile(UpdateRequest $request) //باستخدام ال x-www-form....
+    public function updateprofile(UpdateRequest $request)
     {
         $user = $request->user();
         $data = $request->validated();
