@@ -9,7 +9,7 @@ use App\Models\apartment;
 
 class FavoriteController extends Controller
 {
-    public function toggleFavorite($apartment_id)
+    public function  toggleFavorite($apartment_id)
     {
         $user = Auth::user();
 

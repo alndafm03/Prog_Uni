@@ -16,7 +16,7 @@ class ReviewController extends Controller
         return response()->json($reviews);
     }
 
-    // عرض مراجعات مرتبطة بحجز معين
+    // عرض مراجعات مرتبطة بشقة معين
     public function showapartmentreview($apartment_id)
 {
     $reviews = review::whereHas('booking', function ($query) use ($apartment_id) {
