@@ -61,38 +61,85 @@ class OwnerController extends Controller
 
     public function ownerbookingpending()
     {
-        // جلب كل الحجوزات المرتبطة بشقق يملكها المستخدم الحالي وحالتها pending فقط
-        $bookings = Booking::with(['apartment', 'user'])
-            ->whereHas('apartment', function ($query) {
-                $query->where('owner_id', Auth::id());
-            })
-            ->where('status', 'pending') // ← الشرط الجديد
-            ->get();
+        $user = Auth::user();
 
-        return response()->json([
-            'bookings' => $bookings->map(function ($booking) {
-                return [
-                    'id'         => $booking->id,
-                    'start_date' => $booking->start_date,
-                    'end_date'   => $booking->end_date,
-                    'status'     => $booking->status,
-                    'apartment'  => [
-                        'id'       => $booking->apartment->id,
-                        'province' => $booking->apartment->province,
-                        'city'     => $booking->apartment->city,
-                        'price'    => $booking->apartment->price,
-                        'address'  => $booking->apartment->address,
-                    ],
-                    'renter' => [
-                        'id'         => $booking->user->id,
-                        'first_name' => $booking->user->first_name,
-                        'last_name'  => $booking->user->last_name,
-                        'phone'      => $booking->user->phone,
-                    ]
-                ];
-            })
-        ]);
+        // إذا كان المستخدم Owner → رجّع حجوزات شققه
+        if ($user->role === 'owner') {
+
+            $bookings = Booking::with(['apartment.owner', 'user'])
+                ->whereHas('apartment', function ($query) use ($user) {
+                    $query->where('owner_id', $user->id);
+                })
+                ->where('status', 'pending')
+                ->get();
+
+            return response()->json([
+                'bookings' => $bookings->map(function ($booking) {
+                    return [
+                        'id'         => $booking->id,
+                        'start_date' => $booking->start_date,
+                        'end_date'   => $booking->end_date,
+                        'status'     => $booking->status,
+
+                        'apartment'  => [
+                            'id'       => $booking->apartment->id,
+                            'province' => $booking->apartment->province,
+                            'city'     => $booking->apartment->city,
+                            'price'    => $booking->apartment->price,
+                            'address'  => $booking->apartment->address,
+                        ],
+
+                        // معلومات المستأجر
+                        'renter' => [
+                            'id'         => $booking->user->id,
+                            'first_name' => $booking->user->first_name,
+                            'last_name'  => $booking->user->last_name,
+                            'phone'      => $booking->user->phone,
+                        ]
+                    ];
+                })
+            ]);
+        }
+
+        // إذا كان المستخدم Renter → رجّع حجوزاته pending مع معلومات المالك
+        if ($user->role === 'renter') {
+
+            $bookings = Booking::with(['apartment.owner'])
+                ->where('renter_id', $user->id)
+                ->where('status', 'pending')
+                ->get();
+
+            return response()->json([
+                'bookings' => $bookings->map(function ($booking) {
+                    return [
+                        'id'         => $booking->id,
+                        'start_date' => $booking->start_date,
+                        'end_date'   => $booking->end_date,
+                        'status'     => $booking->status,
+
+                        'apartment'  => [
+                            'id'       => $booking->apartment->id,
+                            'province' => $booking->apartment->province,
+                            'city'     => $booking->apartment->city,
+                            'price'    => $booking->apartment->price,
+                            'address'  => $booking->apartment->address,
+                        ],
+
+                        // معلومات المالك
+                        'owner' => [
+                            'id'         => $booking->apartment->owner->id,
+                            'first_name' => $booking->apartment->owner->first_name,
+                            'last_name'  => $booking->apartment->owner->last_name,
+                            'phone'      => $booking->apartment->owner->phone,
+                        ]
+                    ];
+                })
+            ]);
+        }
+
+        return response()->json(['message' => 'Role not supported'], 403);
     }
+
     public function approve($id)
     {
         // Get booking with apartment details

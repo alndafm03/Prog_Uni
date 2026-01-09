@@ -40,11 +40,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::prefix('apartments')->group(function () {
 
         Route::post('', [ApartmentController::class, 'store']); // POST /apartments
-
-
         Route::get('/Myapartment', [ApartmentController::class, 'myApartments']); // GET /apartments/owner/list
-
-
         Route::post('{apartment}', [ApartmentController::class, 'update']); // PUT /apartments/{id}
         Route::delete('{apartment}', [ApartmentController::class, 'destroy']); // DELETE /apartments/{id}
 
@@ -71,7 +67,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::prefix('reviews')->group(function () {
         // عرض كل المراجعات
         Route::get('', [ReviewController::class, 'index']);
-        // عرض مراجعات مرتبطة بحجز معين
+        // عرض مراجعات مرتبطة بشقة معين
         Route::get('/{booking_id}', [ReviewController::class, 'showapartmentreview']);
         // إنشاء مراجعة جديدة
         Route::post('/{booking_id}', [ReviewController::class, 'store']);
