@@ -42,7 +42,7 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::post('', [ApartmentController::class, 'store']); // POST /apartments
 
 
-        Route::get('Myapartment', [ApartmentController::class, 'myApartments']); // GET /apartments/owner/list
+        Route::get('/Myapartment', [ApartmentController::class, 'myApartments']); // GET /apartments/owner/list
 
 
         Route::post('{apartment}', [ApartmentController::class, 'update']); // PUT /apartments/{id}
