@@ -21,7 +21,7 @@ Route::post('loginAdmin', [AuthController::class, 'login']);
 
 Route::get('apartments', [ApartmentController::class, 'index']); // GET /apartments
 Route::post('filter', [ApartmentController::class, 'filter']); // GET /apartments/filter/list
-Route::get('apartments/{apartment}', [ApartmentController::class, 'show']); // GET /apartments/{id}
+
 
 //user routes
 
@@ -112,6 +112,7 @@ Route::middleware('auth:sanctum')->group(function () {
 //     Route::post('logoutAdmin', [AuthController::class, 'logout'])->name('admin.logout');
 // });
 
+Route::get('apartments/{apartment}', [ApartmentController::class, 'show']); // GET /apartments/{id}
 
 Route::middleware(['auth:sanctum', 'CheckUser'])->group(function () {
 
