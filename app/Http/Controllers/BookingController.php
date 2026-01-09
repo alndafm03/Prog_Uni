@@ -161,19 +161,22 @@ class BookingController extends Controller
         ]);
     }
 
-    // حذف الحجز
+    // حذف الحجز 
     public function destroy($id)
-    {
-        $reservation = booking::where('id', $id)
-            ->where('renter_id', Auth::id())
-            ->first();
+{
+    $reservation = booking::where('id', $id)
+        ->where('renter_id', Auth::id())
+        ->first();
 
-        if (!$reservation) {
-            return response()->json(['message' => 'الحجز غير موجود أو لا يخصك'], 404);
-        }
-
-        $reservation->delete();
-
-        return response()->json(['message' => 'تم حذف الحجز بنجاح']);
+    if (!$reservation) {
+        return response()->json(['message' => 'الحجز غير موجود أو لا يخصك'], 404);
     }
+
+    // تحديث الحالة بدل الحذف
+    $reservation->status = 'cancelled';
+    $reservation->save();
+
+    return response()->json(['message' => 'تم إلغاء الحجز بنجاح']);
+}
+
 }
