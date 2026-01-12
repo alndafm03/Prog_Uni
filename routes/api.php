@@ -11,6 +11,7 @@ use App\Http\Controllers\OwnerController;
 use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\FavoriteController;
+use App\Http\Controllers\MessagesController;
 use Illuminate\Support\Facades\Hash;
 use App\Models\User;
 //public routes
@@ -79,6 +80,9 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('favorite/{apartment_id}', [FavoriteController::class, 'toggleFavorite']);
     Route::get('favorite', [FavoriteController::class, 'getFavorites']);
     Route::delete('favorite/{apartment_id}', [FavoriteController::class, 'removeFavorite']);
+
+    Route::get('/messages/{booking_id}', [MessagesController::class, 'index']);
+    Route::post('/messages', [MessagesController::class, 'store']);
 });
 
 

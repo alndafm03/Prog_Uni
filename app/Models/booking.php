@@ -20,4 +20,8 @@ class booking extends Model
     {
         return $this->hasOne(review::class, 'booking_id');
     }
+    public function messages()
+    {
+        return $this->hasMany(message::class);
+    }
 }
