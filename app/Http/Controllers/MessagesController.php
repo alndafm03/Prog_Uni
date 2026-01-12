@@ -40,7 +40,7 @@ class MessagesController extends Controller
     }
 
     $messages = message::where('booking_id', $booking_id)
-        ->with('sender:id,name') // أو email حسب ما تريد
+        ->with('sender:id,first_name,last_name,phone') // أو email حسب ما تريد
         ->orderBy('created_at')
         ->get();
 
