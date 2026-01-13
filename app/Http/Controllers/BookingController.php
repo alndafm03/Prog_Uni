@@ -66,14 +66,11 @@ class BookingController extends Controller
         //     return response()->json(['message' => 'Start date cannot be in the past'], 400);
         // }
 
-        $exists = booking::where('apartment_id', $request->apartment_id)
+        $exists = booking::where('apartment_id', $request->apartment_id)->whereIn('status', ['pending', 'approved']) // ← المهم
             ->where(function ($query) use ($request) {
-                $query->whereBetween('start_date', [$request->start_date, $request->end_date])
-                    ->orWhereBetween('end_date', [$request->start_date, $request->end_date])
-                    ->orWhere(function ($q) use ($request) {
-                        $q->where('start_date', '<=', $request->start_date)
-                            ->where('end_date', '>=', $request->end_date);
-                    });
+                $query->whereBetween('start_date', [$request->start_date, $request->end_date])->orWhereBetween('end_date', [$request->start_date, $request->end_date])->orWhere(function ($q) use ($request) {
+                    $q->where('start_date', '<=', $request->start_date)->where('end_date', '>=', $request->end_date);
+                });
             })
             ->exists();
 
@@ -161,22 +158,21 @@ class BookingController extends Controller
         ]);
     }
 
-    // حذف الحجز 
+    // حذف الحجز
     public function destroy($id)
-{
-    $reservation = booking::where('id', $id)
-        ->where('renter_id', Auth::id())
-        ->first();
+    {
+        $reservation = booking::where('id', $id)
+            ->where('renter_id', Auth::id())
+            ->first();
 
-    if (!$reservation) {
-        return response()->json(['message' => 'الحجز غير موجود أو لا يخصك'], 404);
+        if (!$reservation) {
+            return response()->json(['message' => 'الحجز غير موجود أو لا يخصك'], 404);
+        }
+
+        // تحديث الحالة بدل الحذف
+        $reservation->status = 'cancelled';
+        $reservation->save();
+
+        return response()->json(['message' => 'تم إلغاء الحجز بنجاح']);
     }
-
-    // تحديث الحالة بدل الحذف
-    $reservation->status = 'cancelled';
-    $reservation->save();
-
-    return response()->json(['message' => 'تم إلغاء الحجز بنجاح']);
-}
-
 }
