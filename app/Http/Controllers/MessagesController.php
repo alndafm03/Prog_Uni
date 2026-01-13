@@ -16,10 +16,13 @@ class MessagesController extends Controller
             'message' => 'required|string',
         ]);
 
-        $booking = booking::find($request->booking_id);
+        $booking = booking::with('apartment')->find($request->booking_id);
 
+        // المالك الحقيقي يأتي من apartment وليس منbookings
+        $ownerId = $booking->apartment->owner_id;
+        $renterId = $booking->renter_id;
         // تحقق أن المستخدم هو المالك أو المستأجر
-        if (!in_array(Auth::id(), [$booking->renter_id, $booking->owner_id])) {
+        if (!in_array(Auth::id(), [$ownerId, $renterId])) {
             return response()->json(['message' => 'غير مصرح لك بإرسال رسالة لهذا الحجز'], 403);
         }
 
@@ -33,9 +36,12 @@ class MessagesController extends Controller
     }
     public function index($booking_id)
     {
-        $booking = booking::findOrFail($booking_id);
+        $booking = booking::with('apartment')->findOrFail($booking_id);
+        // نفس التحقق هنا أيضًا
+        $ownerId = $booking->apartment->owner_id;
+        $renterId = $booking->renter_id;
 
-        if (!in_array(Auth::id(), [$booking->renter_id, $booking->owner_id])) {
+        if (!in_array(Auth::id(), [$ownerId, $renterId])) {
             return response()->json(['message' => 'غير مصرح لك بعرض الرسائل'], 403);
         }
 
