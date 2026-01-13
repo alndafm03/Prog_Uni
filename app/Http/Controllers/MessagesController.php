@@ -55,7 +55,7 @@ class MessagesController extends Controller
     public function inbox()
     {
         $userId = Auth::id();
-        $bookings = Booking::where(function ($q) use ($userId) {
+        $bookings = booking::where(function ($q) use ($userId) {
             $q->where('renter_id', $userId)->orWhereHas('apartment', function ($q2) use ($userId) {
                 $q2->where('owner_id', $userId);
             });
