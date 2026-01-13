@@ -46,9 +46,9 @@ class MessagesController extends Controller
         }
 
         $messages = message::where('booking_id', $booking_id)
-            ->select('id', 'sender_id', 'message', 'created_at')// فقط المهم
+            ->select('id', 'sender_id', 'message', 'created_at') // فقط المهم
             ->with(['sender:id,first_name,last_name']) // فقط الاسم
-            ->orderBy('created_at') ->get();
+            ->orderBy('created_at')->get();
 
         return response()->json(['messages' => $messages]);
     }
@@ -56,13 +56,20 @@ class MessagesController extends Controller
     {
         $userId = Auth::id();
 
-        $bookings = booking::where(function ($q) use ($userId) {
+        $bookings = Booking::where(function ($q) use ($userId) {
             $q->where('renter_id', $userId)
-                ->orWhere('owner_id', $userId);
+                ->orWhereHas('apartment', function ($q2) use ($userId) {
+                    $q2->where('owner_id', $userId);
+                });
         })
-            ->with(['messages' => function ($q) {
-                $q->latest()->limit(1); // آخر رسالة فقط
-            }, 'renter:id,first_name,last_name,phone', 'owner:id,first_name,last_name,phone'])
+            ->with([
+                'apartment:id,owner_id,title',
+                'apartment.owner:id,first_name,last_name,phone',
+                'renter:id,first_name,last_name,phone',
+                'messages' => function ($q) {
+                    $q->latest()->limit(1); // آخر رسالة فقط
+                }
+            ])
             ->get();
 
         return response()->json(['chats' => $bookings]);
