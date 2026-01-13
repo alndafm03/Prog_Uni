@@ -55,13 +55,23 @@ class MessagesController extends Controller
     public function inbox()
     {
         $userId = Auth::id();
+
         $bookings = booking::where(function ($q) use ($userId) {
-            $q->where('renter_id', $userId)->orWhereHas('apartment', function ($q2) use ($userId) {
-                $q2->where('owner_id', $userId);
-            });
-        })->with(['apartment:id,owner_id,province,city,address,price', 'apartment.owner:id,first_name,last_name,phone', 'renter:id,first_name,last_name,phone', 'messages' => function ($q) {
-            $q->latest()->limit(1);
-        }])->get();
+            $q->where('renter_id', $userId)
+                ->orWhereHas('apartment', function ($q2) use ($userId) {
+                    $q2->where('owner_id', $userId);
+                });
+        })
+            ->with([
+                'apartment:id,owner_id,province,city,address,price',
+                'apartment.owner:id,first_name,last_name,phone',
+                'user:id,first_name,last_name,phone', // ← بدل renter
+                'messages' => function ($q) {
+                    $q->latest()->limit(1);
+                }
+            ])
+            ->get();
+
         return response()->json(['chats' => $bookings]);
     }
 }
