@@ -83,6 +83,7 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::get('/messages/{booking_id}', [MessagesController::class, 'index']);
     Route::post('/messages', [MessagesController::class, 'store']);
+    Route::get('/chats', [MessagesController::class, 'inbox']);
 });
 
 
