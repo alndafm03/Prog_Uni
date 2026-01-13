@@ -46,9 +46,9 @@ class MessagesController extends Controller
         }
 
         $messages = message::where('booking_id', $booking_id)
-            ->with('sender:id,first_name,last_name,phone') // أو email حسب ما تريد
-            ->orderBy('created_at', 'desc')
-            ->get();
+            ->select('id', 'sender_id', 'message', 'created_at')// فقط المهم
+            ->with(['sender:id,first_name,last_name']) // فقط الاسم
+            ->orderBy('created_at') ->get();
 
         return response()->json(['messages' => $messages]);
     }
