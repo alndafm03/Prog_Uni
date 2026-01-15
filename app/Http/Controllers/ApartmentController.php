@@ -100,7 +100,7 @@ class ApartmentController extends Controller
 
     // تحميل العلاقات المطلوبة
     $apartment->load([
-        'owner:id,first_name,phone',
+        'owner:id,first_name,phone,qr_photo',
         'booking:id,apartment_id,start_date,end_date',
         'booking.review:id,booking_id,rating,comment'
     ]);

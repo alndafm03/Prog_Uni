@@ -92,6 +92,12 @@ class UserController extends Controller
             }
             $data['personal_photo'] = $request->file('personal_photo')->store('Myphoto', 'public');
         }
+        if ($request->hasFile('qr_photo')) {
+            if ($user->qr_photo) {
+                Storage::disk('public')->delete($user->qr_photo);
+            }
+            $data['qr_photo'] = $request->file('qr_photo')->store('Myphoto', 'public');
+        }
         $user->update($data);
 
         if ($user->wasChanged()) {
@@ -109,6 +115,9 @@ class UserController extends Controller
         }
         if ($user->id_photo) {
             Storage::disk('public')->delete($user->id_photo);
+        }
+        if ($user->qr_photo) {
+            Storage::disk('public')->delete($user->qr_photo);
         }
         $user->tokens()->delete();
         $user->delete();

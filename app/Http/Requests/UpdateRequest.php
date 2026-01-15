@@ -21,6 +21,7 @@ class UpdateRequest extends FormRequest
             'date_of_birth'  => 'sometimes|date|before:today',
             'personal_photo' => 'sometimes|image|mimes:jpg,jpeg,png|max:2048',
             'id_photo'       => 'sometimes|image|mimes:jpg,jpeg,png|max:2048',
+            'qr_photo'       => 'sometimes|image|mimes:jpg,jpeg,png|max:2048',
         ];
     }
 }
