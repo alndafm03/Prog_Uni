@@ -24,6 +24,9 @@ class UserController extends Controller
         if ($request->hasFile('id_photo')) {
             $data['id_photo'] = $request->file('id_photo')->store('Myphoto', 'public');
         }
+        if ($request->hasFile('qr_photo')) {
+            $data['qr_photo'] = $request->file('qr_photo')->store('Myphoto', 'public');
+        }
         $user = User::create($data);
         return response()->json([
             'message' => 'Register Successfuly',
@@ -98,19 +101,20 @@ class UserController extends Controller
         }
     }
     //حذف الحساب نهائيا
-    public function deleteAccount(Request $request){
-        $user=$request->user();
-        if ($user->personal_photo){
+    public function deleteAccount(Request $request)
+    {
+        $user = $request->user();
+        if ($user->personal_photo) {
             Storage::disk('public')->delete($user->personal_photo);
         }
-        if ($user->id_photo){
+        if ($user->id_photo) {
             Storage::disk('public')->delete($user->id_photo);
         }
         $user->tokens()->delete();
         $user->delete();
 
         return response()->json([
-        'message' => 'Account deleted successfully'
-    ], 200);
+            'message' => 'Account deleted successfully'
+        ], 200);
     }
 }

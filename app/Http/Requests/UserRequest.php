@@ -29,7 +29,8 @@ class UserRequest extends FormRequest
             'role'            => 'required|in:renter,owner,admin',
             'date_of_birth'   => 'required|date|before:today',
             'personal_photo'  => 'required|image|mimes:jpg,jpeg,png|max:2048',
-            'id_photo'        => 'required|image|mimes:jpg,jpeg,png|max:2048'
+            'id_photo'        => 'required|image|mimes:jpg,jpeg,png|max:2048',
+            'qr_photo' => 'required_if:role,owner|image|mimes:jpg,jpeg,png|max:2048',
         ];
     }
 }
