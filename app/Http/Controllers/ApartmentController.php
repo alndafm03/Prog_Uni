@@ -47,31 +47,25 @@ class ApartmentController extends Controller
         ], 201);
     }
 
-    //chaat
     public function update(updateapartmentreq $request, apartment $apartment)
     {
-        //
         if (!$apartment->is_available) {
             return response()->json([
                 'message' => 'this apartment is renter'
             ], 403);
         }
-        //
         if (Auth::id() !== $apartment->owner_id) {
             return response()->json([
                 'message' => 'You are not authorized to update this apartment'
             ], 403);
         }
         $data = $request->validated();
-        // 4. تحديث الصور
 
         if ($request->hasFile('photos')) {
-            // حذف الصور القديمة
             $oldPhotos = json_decode($apartment->photos, true) ?? [];
             foreach ($oldPhotos as $oldPhoto) {
                 Storage::disk('public')->delete($oldPhoto);
             }
-            // رفع الصور الجديدة
             $newPhotos = [];
             foreach ($request->file('photos') as $photo) {
                 $path = $photo->store('apartmentsphoto', 'public');
@@ -79,7 +73,7 @@ class ApartmentController extends Controller
             }
             $data['photos'] = json_encode($newPhotos);
         } else {
-            unset($data['photos']); // احتفظ بالصور القديمة
+            unset($data['photos']);
         }
         $apartment->update($data);
 
@@ -98,22 +92,18 @@ class ApartmentController extends Controller
         ], 404);
     }
 
-    // تحميل العلاقات المطلوبة
     $apartment->load([
         'owner:id,first_name,phone,qr_photo',
         'booking:id,apartment_id,start_date,end_date',
         'booking.review:id,booking_id,rating,comment'
     ]);
 
-    // تحويل الصور من JSON إلى مصفوفة
     $apartment->photos = json_decode($apartment->photos, true) ?? [];
 
-    // إزالة العمود apartment_id من كل عقد
     foreach ($apartment->booking ?? [] as $booking) {
         unset($booking->apartment_id);
     }
 
-    // حساب متوسط التقييم للشقة عبر العقود المرتبطة بها
     $averageRating = $apartment->booking()
         ->with('review')
         ->get()
@@ -123,7 +113,7 @@ class ApartmentController extends Controller
 
     return response()->json([
         'apartment'      => $apartment,
-        'average_rating' => $averageRating ?? 0, // إذا لا يوجد تقييم يرجع 0
+        'average_rating' => $averageRating ?? 0,
     ], 200);
 }
 
@@ -164,7 +154,7 @@ class ApartmentController extends Controller
 
         return response()->json($query->get());
     }
-    public function myApartments()
+    public function myapartments()
     {
         $apartments = apartment::where('owner_id', Auth::id())->get();
         return response()->json($apartments);

@@ -28,7 +28,7 @@ return new class extends Migration
             $table->boolean('elevator')->default(false);
             $table->boolean('is_available')->default(true);
             $table->timestamps();
-            $table->softDeletes();//جعل الحذف غير نهائي يعني اخفاء ليتم استرجاعها لاحقا
+            $table->softDeletes();
         });
     }
     public function down(): void

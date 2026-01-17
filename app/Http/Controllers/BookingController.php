@@ -8,14 +8,12 @@ use Illuminate\Support\Facades\Auth;
 
 class BookingController extends Controller
 {
-    public function renterBooking()
+    public function renterbooking()
     {
-        // جلب كل الحجوزات الخاصة بالمستأجر الحالي
         $bookings = Booking::with(['apartment.owner'])
             ->where('renter_id', Auth::id())
             ->get();
 
-        // تحديث الحالة إذا انتهى زمن الاستئجار
         foreach ($bookings as $booking) {
             if ($booking->status === 'approved' && now()->greaterThan($booking->end_date)) {
                 $booking->status = 'completed';
@@ -50,7 +48,6 @@ class BookingController extends Controller
     }
 
 
-    // إنشاء حجز جديد
     public function store(Request $request)
     {
         $request->validate([
@@ -58,13 +55,10 @@ class BookingController extends Controller
             'start_date' => 'required|date|after_or_equal:today',
             'end_date' => 'required|date|after_or_equal:start_date',
         ]);
-        // Check if the authenticated user is renter
         if (Auth::user()->role !== 'renter') {
             return response()->json(['message' => 'Only renter accounts can create reservations'], 403);
         }
-        // if ($request->start_date < now()->toDateString()) {
-        //     return response()->json(['message' => 'Start date cannot be in the past'], 400);
-        // }
+
 
         $exists = booking::where('apartment_id', $request->apartment_id)->whereIn('status', ['pending', 'approved']) // ← المهم
             ->where(function ($query) use ($request) {
@@ -130,7 +124,6 @@ class BookingController extends Controller
     }
 
 
-    // تعديل الحجز من قبل المستخدم
     public function update(Request $request, $id)
     {
         $request->validate([
@@ -158,7 +151,6 @@ class BookingController extends Controller
         ]);
     }
 
-    // حذف الحجز
     public function destroy($id)
     {
         $reservation = booking::where('id', $id)
@@ -169,7 +161,6 @@ class BookingController extends Controller
             return response()->json(['message' => 'الحجز غير موجود أو لا يخصك'], 404);
         }
 
-        // تحديث الحالة بدل الحذف
         $reservation->status = 'cancelled';
         $reservation->save();
 

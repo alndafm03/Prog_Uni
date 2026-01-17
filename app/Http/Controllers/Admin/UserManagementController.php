@@ -90,7 +90,7 @@ class UserManagementController extends Controller
     }
 
     //ارجاع كل اليوزرس
-    public function getAllUsers()
+    public function getallusers()
     {
         $users = User::select(
             'id',

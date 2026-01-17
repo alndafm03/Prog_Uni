@@ -38,10 +38,10 @@ class User extends Authenticatable
         return $this->hasManyThrough(
             Apartment::class,
             Booking::class,
-            'renter_id', // Foreign key on bookings table
-            'id', // Foreign key on apartments table
-            'id', // Local key on users table
-            'apartment_id' // Local key on bookings table
+            'renter_id',
+            'id',
+            'id',
+            'apartment_id'
         );
     }
     public function favorites()

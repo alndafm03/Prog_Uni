@@ -20,7 +20,6 @@ class apartment extends Model
     {
         return $this->hasMany(booking::class);
     }
-    // العلاقة مع المستأجرين من خلال الحجوزات
     public function renters()
     {
         return $this->hasManyThrough(

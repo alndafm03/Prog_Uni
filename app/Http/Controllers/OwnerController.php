@@ -9,8 +9,6 @@ use App\Models\booking;
 
 class OwnerController extends Controller
 {
-
-    //تشيك على انتهاء مدة الحجز
     public function checkAndUpdateStatus(Booking $booking)
     {
         if ($booking->status === 'approved' && now()->greaterThan($booking->end_date)) {
@@ -18,7 +16,7 @@ class OwnerController extends Controller
             $booking->save();
         }
     }
-    public function ownerBooking()
+    public function ownerbooking()
     {
         $bookings = booking::with(['apartment', 'user'])
             ->whereHas('apartment', function ($query) {
@@ -63,7 +61,6 @@ class OwnerController extends Controller
     {
         $user = Auth::user();
 
-        // إذا كان المستخدم Owner → رجّع حجوزات شققه
         if ($user->role === 'owner') {
 
             $bookings = Booking::with(['apartment.owner', 'user'])
@@ -101,7 +98,6 @@ class OwnerController extends Controller
             ]);
         }
 
-        // إذا كان المستخدم Renter → رجّع حجوزاته pending مع معلومات المالك
         if ($user->role === 'renter') {
 
             $bookings = Booking::with(['apartment.owner'])
@@ -125,7 +121,6 @@ class OwnerController extends Controller
                             'address'  => $booking->apartment->address,
                         ],
 
-                        // معلومات المالك
                         'owner' => [
                             'id'         => $booking->apartment->owner->id,
                             'first_name' => $booking->apartment->owner->first_name,
@@ -142,30 +137,25 @@ class OwnerController extends Controller
 
     public function approve($id)
     {
-        // Get booking with apartment details
         $booking = Booking::with('apartment')->find($id);
 
-        // Check if booking exists
         if (!$booking) {
             return response()->json([
                 'message' => 'Booking not found'
             ], 404);
         }
 
-        // Check if the current user is the owner of the apartment
         if ($booking->apartment->owner_id !== Auth::id()) {
             return response()->json([
                 'message' => 'You are not authorized to approve this booking'
             ], 403);
         }
 
-        // Ensure the current status is pending
         if ($booking->status !== 'pending') {
             return response()->json([
                 'message' => 'This booking cannot be approved because it is not in pending status'
             ], 400);
         }
-        // Update status to approved
         $booking->status = 'approved';
         $booking->save();
 
@@ -177,31 +167,26 @@ class OwnerController extends Controller
 
     public function reject($id)
     {
-        // Get booking with apartment details
         $booking = Booking::with('apartment')->find($id);
 
-        // Check if booking exists
         if (!$booking) {
             return response()->json([
                 'message' => 'Booking not found'
             ], 404);
         }
 
-        // Check if the current user is the owner of the apartment
         if ($booking->apartment->owner_id !== Auth::id()) {
             return response()->json([
                 'message' => 'You are not authorized to reject this booking'
             ], 403);
         }
 
-        // Ensure the current status is pending
         if ($booking->status !== 'pending') {
             return response()->json([
                 'message' => 'This booking cannot be rejected because it is not in pending status'
             ], 400);
         }
 
-        // Update status to rejected
         $booking->status = 'rejected';
         $booking->save();
 

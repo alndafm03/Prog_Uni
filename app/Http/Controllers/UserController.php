@@ -107,7 +107,7 @@ class UserController extends Controller
         }
     }
     //حذف الحساب نهائيا
-    public function deleteAccount(Request $request)
+    public function deletemyaccount(Request $request)
     {
         $user = $request->user();
         if ($user->personal_photo) {

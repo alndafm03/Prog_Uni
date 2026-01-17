@@ -9,14 +9,12 @@ use Illuminate\Support\Facades\Auth;
 
 class ReviewController extends Controller
 {
-    // عرض كل المراجعات
     public function index()
     {
         $reviews = review::with('booking')->get();
         return response()->json($reviews);
     }
 
-    // عرض مراجعات مرتبطة بشقة معين
     public function showapartmentreview($apartment_id)
 {
     $reviews = review::whereHas('booking', function ($query) use ($apartment_id) {
@@ -29,7 +27,6 @@ class ReviewController extends Controller
 }
 
 
-    // إنشاء مراجعة جديدة
     public function store(Request $request, $booking_id)
     {
         $request->validate([
@@ -39,7 +36,6 @@ class ReviewController extends Controller
 
         $booking = booking::findOrFail($booking_id);
 
-        // تأكد أن المستخدم هو صاحب الحجز
         if ($booking->renter_id !== Auth::id()) {
             return response()->json(['message' => 'لا يمكنك إضافة مراجعة لحجز لا يخصك'], 403);
         }
@@ -59,7 +55,6 @@ class ReviewController extends Controller
         ], 201);
     }
 
-    // تعديل مراجعة
     public function update(Request $request, $id)
     {
         $request->validate([
@@ -69,7 +64,6 @@ class ReviewController extends Controller
 
         $review = review::findOrFail($id);
 
-        // تأكد أن المراجعة مرتبطة بحجز يخص المستخدم
         if ($review->booking->renter_id !== Auth::id()) {
             return response()->json(['message' => 'لا يمكنك تعديل مراجعة لا تخصك'], 403);
         }
@@ -85,7 +79,6 @@ class ReviewController extends Controller
         ]);
     }
 
-    // حذف مراجعة
     public function destroy($id)
     {
         $review = review::findOrFail($id);
