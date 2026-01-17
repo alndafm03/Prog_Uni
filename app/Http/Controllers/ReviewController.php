@@ -44,7 +44,7 @@ class ReviewController extends Controller
             return response()->json(['message' => 'لا يمكنك إضافة مراجعة إلا بعد الموافقة على الحجز أو اكتماله'], 403);
         }
         $review = review::create([
-            'booking_id' => $booking->id,
+            'booking_id' => $booking->apartment_id,
             'rating'     => $request->rating,
             'comment'    => $request->comment,
         ]);
